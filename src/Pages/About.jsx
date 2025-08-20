@@ -50,7 +50,7 @@ const ProfileImage = memo(() => (
           <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 via-transparent to-blue-500/20 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 hidden sm:block" />
           
           <img
-            src="src\images\profile.jpg"
+            src="https://firebasestorage.googleapis.com/v0/b/portfolio-bhanuka.firebasestorage.app/o/WhatsApp%20Image%202025-03-11%20at%2012.32.39.jpg?alt=media&token=13f27466-e193-46f0-996b-d2b0bf13ff40"
             alt="Profile"
             className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2"
             loading="lazy"
@@ -214,15 +214,12 @@ const AboutPage = () => {
               data-aos="fade-right"
               data-aos-duration="1500"
             >
-            I am a dedicated and passionate Software Engineering student at the Sri Lanka Institute of Information Technology (SLIIT), with a strong focus on full-stack development, API integration, and scalable web applications. Leveraging expertise in Python (Flask, FastAPI) and Node.js, I focus on building and optimizing RESTful APIs while ensuring seamless database management using MySQL and MongoDB.
-
-            I thrive on creating high-performance, user-friendly web applications using JavaScript, React, and Express.js. My experience in agile methodologies, problem-solving, and teamwork has enabled me to contribute effectively to dynamic development teams, delivering efficient and scalable software solutions. I am always eager to learn, adapt, and push the boundaries of technology to build impactful applications.
-
+            Results-driven BSc (Hons) Software Engineering graduate from the Sri Lanka Institute of Information Technology (SLIIT), with a strong passion for full-stack web and mobile development. Skilled in building and optimizing scalable applications using the MERN stack (MongoDB, Express.js, React, Node.js), and developing cross-platform mobile apps with React Native. Proficient in backend development and API integration using Python (Flask, FastAPI), with solid experience in database management (MySQL, MongoDB). A proactive team player with hands-on experience in agile environments, focused on delivering efficient, high-performance, and user-centric software solutions.
             <br/><br/>Let's connect and build something amazing together! 
             </p>
 
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-4 lg:px-0 w-full">
-              <a href="https://drive.google.com/file/d/13cS_dBwsFBPmkApJVOq66qvk-qmvU29q/view?usp=sharing" className="w-full lg:w-auto">
+              <a href="https://drive.google.com/file/d/1FWLpwxPPqtWPsqU9jaBhgKUJZ6CmAHW0/view?usp=drive_link" className="w-full lg:w-auto">
               <button 
                 data-aos="fade-up"
                 data-aos-duration="800"

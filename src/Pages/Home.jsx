@@ -7,7 +7,7 @@ import 'aos/dist/aos.css'
 // Memoized Components
 const StatusBadge = memo(() => (
   <div className="inline-block animate-float lg:mx-0" data-aos="zoom-in" data-aos-delay="400">
-    <div className="relative group">
+    {/* <div className="relative group">
       <div className="absolute -inset-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
       <div className="relative px-3 sm:px-4 py-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
         <span className="bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-transparent bg-clip-text sm:text-sm text-[0.7rem] font-medium flex items-center">
@@ -15,7 +15,7 @@ const StatusBadge = memo(() => (
           Ready to Innovate
         </span>
       </div>
-    </div>
+    </div> */}
   </div>
 ));
 
@@ -25,7 +25,7 @@ const MainTitle = memo(() => (
       <span className="relative inline-block">
         <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
         <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-          Full Stack
+          Backend & Mobile Application
         </span>
       </span>
       <br />
@@ -77,8 +77,14 @@ const SocialLink = memo(({ icon: Icon, link }) => (
 const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
-const WORDS = ["Software Enginnering Student", "Tech Enthusiast"];
-const TECH_STACK = ["MERN", "Javascript", "Python"];
+const WORDS = [
+  "Backend Developer",
+  "React Native Developer",
+  "API Integrator",
+  "JavaScript & Python",
+  "Scalable Systems Builder"
+];
+const TECH_STACK = ["Javascript", "Python", "React-Native"];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/didulabhanuka" },
   { icon: Linkedin, link: "https://www.linkedin.com/in/didulabhanuka/" },
@@ -164,7 +170,7 @@ const Home = () => {
         <div className="container mx-auto px-[5%] sm:px-6 lg:px-[0%] min-h-screen">
           <div className="flex flex-col lg:flex-row items-center justify-center h-screen md:justify-between gap-0 sm:gap-12 lg:gap-20">
             {/* Left Column */}
-            <div className="w-full lg:w-1/2 space-y-6 sm:space-y-8 text-left lg:text-left order-1 lg:order-1 lg:mt-0"
+            <div className="w-full lg:w-1/2 space-y-6 sm:space-y-8 text-left lg:text-left order-1 lg:order-1 lg:mt-0 ml-36"
               data-aos="fade-right"
               data-aos-delay="200">
               <div className="space-y-4 sm:space-y-6">
@@ -183,7 +189,7 @@ const Home = () => {
                 <p className="text-base md:text-lg text-gray-400 max-w-xl leading-relaxed font-light"
                   data-aos="fade-up"
                   data-aos-delay="1000">
-                  A Software Engineering student with a strong focus on full-stack development, API integration, and scalable web applications.
+                  Focused on backend development and mobile app solutions, with expertise in API integration, scalable web systems, and React Native applications.
                 </p>
 
                 {/* Tech Stack */}
