@@ -16,52 +16,15 @@ import "aos/dist/aos.css";
 import Certificate from "../components/Certificate";
 import { Code, Award, Boxes } from "lucide-react";
 
-// Separate ShowMore/ShowLess button component
+// Toggle button
 const ToggleButton = ({ onClick, isShowingMore }) => (
   <button
     onClick={onClick}
-    className="
-      px-3 py-1.5
-      text-slate-300 
-      hover:text-white 
-      text-sm 
-      font-medium 
-      transition-all 
-      duration-300 
-      ease-in-out
-      flex 
-      items-center 
-      gap-2
-      bg-white/5 
-      hover:bg-white/10
-      rounded-md
-      border 
-      border-white/10
-      hover:border-white/20
-      backdrop-blur-sm
-      group
-      relative
-      overflow-hidden
-    "
+    className="px-3 py-1.5 text-slate-300 hover:text-white text-sm font-medium transition-all duration-300 ease-in-out flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-md border border-white/10 hover:border-white/20 backdrop-blur-sm group relative overflow-hidden"
   >
     <span className="relative z-10 flex items-center gap-2">
       {isShowingMore ? "See Less" : "See More"}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={`
-          transition-transform 
-          duration-300 
-          ${isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"}
-        `}
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ${isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"}`}>
         <polyline points={isShowingMore ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
       </svg>
     </span>
@@ -69,18 +32,17 @@ const ToggleButton = ({ onClick, isShowingMore }) => (
   </button>
 );
 
+ToggleButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  isShowingMore: PropTypes.bool.isRequired,
+};
+
 function TabPanel({ children, value, index, ...other }) {
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
+    <div role="tabpanel" hidden={value !== index} id={`full-width-tabpanel-${index}`} aria-labelledby={`full-width-tab-${index}`} {...other}>
       {value === index && (
         <Box sx={{ p: { xs: 1, sm: 3 } }}>
-          <Typography>{children}</Typography>
+          <Typography component={"div"}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -119,14 +81,19 @@ export default function FullWidthTabs() {
   const [certificates, setCertificates] = useState([]);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCertificates, setShowAllCertificates] = useState(false);
-  const isMobile = window.innerWidth < 768;
-  const initialItems = isMobile ? 4 : 6;
+
+  // safer mobile check
+  const [initialItems, setInitialItems] = useState(6);
 
   useEffect(() => {
-    // Initialize AOS once
-    AOS.init({
-      once: false, // This will make animations occur only once
-    });
+    const onResize = () => setInitialItems(window.innerWidth < 768 ? 4 : 6);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    AOS.init({ once: false });
   }, []);
 
   const fetchData = useCallback(async () => {
@@ -134,10 +101,7 @@ export default function FullWidthTabs() {
       const projectCollection = collection(db, "projects");
       const certificateCollection = collection(db, "certificates");
 
-      const [projectSnapshot, certificateSnapshot] = await Promise.all([
-        getDocs(projectCollection),
-        getDocs(certificateCollection),
-      ]);
+      const [projectSnapshot, certificateSnapshot] = await Promise.all([getDocs(projectCollection), getDocs(certificateCollection)]);
 
       const projectData = projectSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -150,7 +114,7 @@ export default function FullWidthTabs() {
       setProjects(projectData);
       setCertificates(certificateData);
 
-      // Store in localStorage
+      // cache
       localStorage.setItem("projects", JSON.stringify(projectData));
       localStorage.setItem("certificates", JSON.stringify(certificateData));
     } catch (error) {
@@ -162,44 +126,39 @@ export default function FullWidthTabs() {
     fetchData();
   }, [fetchData]);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const handleChange = (_event, newValue) => setValue(newValue);
 
   const toggleShowMore = useCallback((type) => {
-    if (type === 'projects') {
-      setShowAllProjects(prev => !prev);
-    } else {
-      setShowAllCertificates(prev => !prev);
-    }
+    if (type === "projects") setShowAllProjects((prev) => !prev);
+    else setShowAllCertificates((prev) => !prev);
   }, []);
 
   const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
   const displayedCertificates = showAllCertificates ? certificates : certificates.slice(0, initialItems);
 
   return (
-    <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Portofolio">
-      {/* Header section - unchanged */}
+    <section className="w-full bg-[#030014] overflow-hidden px-[5%] lg:px-[10%] pt-10 sm:pt-12 pb-10 sm:pb-16" id="Portofolio">
+      {/* Header */}
       <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
         <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
-          <span style={{
-            color: '#6366f1',
-            backgroundImage: 'linear-gradient(45deg, #6366f1 10%, #a855f7 93%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
+          <span
+            style={{
+              color: "#6366f1",
+              backgroundImage: "linear-gradient(45deg, #6366f1 10%, #a855f7 93%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             Portfolio Showcase
           </span>
         </h2>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          Explore my journey through projects, certifications, and technical expertise. 
-          Each section represents a milestone in my continuous learning path.
+          Explore my journey through projects, certifications, and technical expertise. Each section represents a milestone in my continuous learning path.
         </p>
       </div>
 
       <Box sx={{ width: "100%" }}>
-        {/* AppBar and Tabs section - unchanged */}
         <AppBar
           position="static"
           elevation={0}
@@ -223,7 +182,6 @@ export default function FullWidthTabs() {
           }}
           className="md:px-4"
         >
-          {/* Tabs remain unchanged */}
           <Tabs
             value={value}
             onChange={handleChange}
@@ -231,7 +189,6 @@ export default function FullWidthTabs() {
             indicatorColor="secondary"
             variant="fullWidth"
             sx={{
-              // Existing styles remain unchanged
               minHeight: "70px",
               "& .MuiTab-root": {
                 fontSize: { xs: "0.9rem", md: "1rem" },
@@ -268,62 +225,37 @@ export default function FullWidthTabs() {
               },
             }}
           >
-            <Tab
-              icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Projects"
-              {...a11yProps(0)}
-            />
-            <Tab
-              icon={<Award className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Certificates"
-              {...a11yProps(1)}
-            />
-            <Tab
-              icon={<Boxes className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Tech Stack"
-              {...a11yProps(2)}
-            />
+            <Tab icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />} label="Projects" {...a11yProps(0)} />
+            <Tab icon={<Award className="mb-2 w-5 h-5 transition-all duration-300" />} label="Certificates" {...a11yProps(1)} />
+            <Tab icon={<Boxes className="mb-2 w-5 h-5 transition-all duration-300" />} label="Tech Stack" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
 
-        <SwipeableViews
-          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-          index={value}
-          onChangeIndex={setValue}
-        >
+        <SwipeableViews axis={theme.direction === "rtl" ? "x-reverse" : "x"} index={value} onChangeIndex={setValue}>
           <TabPanel value={value} index={0} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5">
                 {displayedProjects.map((project, index) => (
                   <div
                     key={project.id || index}
                     data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
                     data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
                   >
-                    <CardProject
-                      Img={project.Img}
-                      Title={project.Title}
-                      Description={project.Description}
-                      Link={project.Link}
-                      id={project.id}
-                    />
+                    <CardProject Img={project.Img} Title={project.Title} Description={project.Description} Link={project.Link} id={project.id} />
                   </div>
                 ))}
               </div>
             </div>
             {projects.length > initialItems && (
               <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={() => toggleShowMore('projects')}
-                  isShowingMore={showAllProjects}
-                />
+                <ToggleButton onClick={() => toggleShowMore("projects")} isShowingMore={showAllProjects} />
               </div>
             )}
           </TabPanel>
 
           <TabPanel value={value} index={1} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
                 {displayedCertificates.map((certificate, index) => (
                   <div
                     key={index}
@@ -337,17 +269,14 @@ export default function FullWidthTabs() {
             </div>
             {certificates.length > initialItems && (
               <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={() => toggleShowMore('certificates')}
-                  isShowingMore={showAllCertificates}
-                />
+                <ToggleButton onClick={() => toggleShowMore("certificates")} isShowingMore={showAllCertificates} />
               </div>
             )}
           </TabPanel>
 
           <TabPanel value={value} index={2} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden pb-[5%]">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-8 gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 lg:gap-8">
                 {techStacks.map((stack, index) => (
                   <div
                     key={index}
@@ -362,6 +291,6 @@ export default function FullWidthTabs() {
           </TabPanel>
         </SwipeableViews>
       </Box>
-    </div>
+    </section>
   );
 }
